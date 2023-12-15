@@ -1,107 +1,95 @@
 package Model;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-public class baraja {
-        private String name;
-        private Card[] card;
+enum Palo {
+    CORAZONES, DIAMANTES, ESPADAS, TREBOLES
 
-        public void Card(String name, int num){
-            this.name = name;
-            if(num<=1){num=40;
+}
+
+class baraja {
+    private Palo palo;
+    private String valor;
+
+    public baraja(Palo palo, String valor) {
+        this.palo = palo;
+        this.valor = valor;
+    }
+
+    public baraja() {
+
+    }
+
+    public String toString() {
+        return valor + " de " + palo;
+    }
+}
+
+class Baraja {
+    private List<Carta> cartas;
+
+    public Baraja() {
+        cartas = new ArrayList<>();
+        inicializarBaraja();
+        barajarBaraja();
+    }
+
+    private void inicializarBaraja() {
+        for (Palo palo : Palo.values()) {
+            for (int i = 2; i <= 10; i++) {
+                cartas.add(new Carta(palo, String.valueOf(i)));
             }
-            this.card = new Card[num];
+            cartas.add(new Carta(palo, "J"));
+            cartas.add(new Carta(palo, "Q"));
+            cartas.add(new Carta(palo, "K"));
+            cartas.add(new Carta(palo, "A"));
         }
-        public Card(){
-            this("Genérico",2);
+    }
+
+    private void barajarBaraja() {
+        Collections.shuffle(cartas);
+    }
+
+    public Carta repartirCarta() {
+        if (cartas.isEmpty()) {
+            System.out.println("Se acabaron las cartas. La baraja está vacía.");
+            return null;
+        }
+        return cartas.remove(0);
+    }
+
+    public void mostrarBaraja() {
+        for (Carta carta : cartas) {
+            System.out.println(carta);
+        }
+    }
+}
+
+class Mostrarbaraja {
+    public static void main(String[] args) {
+        Mostrarbaraja baraja = new Mostrarbaraja();
+
+        System.out.println("Mostrar la baraja antes de repartir:");
+        baraja.mostrarbaraja();
+
+        Carta carta1 = baraja.repartirCarta();
+        Carta carta2 = baraja.repartirCarta();
+
+        if (carta1 != null && carta2 != null) {
+            System.out.println("\nCarta 1: " + carta1);
+            System.out.println("Carta 2: " + carta2);
         }
 
-        public String getName() {
-            return name;
-        }
+        System.out.println("\nMostrar la baraja después de repartir:");
+        baraja.mostrarbaraja();
+    }
 
-        public void setName(String name) {
-            this.name = name;
-        }
+    private Carta repartirCarta() {
+        return null;
+    }
 
-        @Override
-        public String toString() {
-            return "Parking{" +
-                    "name='" + name + '\'' +
-                    ", cars=" + Arrays.toString(cars) +
-                    '}';
-        }
-
-
-        public boolean isFull(){
-            return howManyCars()==cars.length;
-       /* boolean result=true;
-        for(int i=0;i<cars.length&&result;i++){
-            if(cars[i]==null){
-                result=false;
-            }
-        }
-        return result;*/
-        }
-        public int howManyCars(){
-            int result = 0;
-            for(Car car:cars){
-                if(car!=null){
-                    result++;
-                }
-            }
-            return result;
-        }
-        public int searchCar(String license){
-            int pos=-1;
-            for(int i=0;i<cars.length&&pos==-1;i++){
-                if(cars[i]!=null) {
-                    if (cars[i].getLicense().equals(license)) { //==
-                        pos = i;
-                    }
-                }
-            }
-            return pos;
-        }
-        public int parkCar(Car car){
-            int pos=-1;
-            if(!isFull() && searchCar(car.getLicense())==-1){
-                for(int i=0;i<cars.length&&pos==-1;i++){
-                    if(cars[i]==null) {
-                        //hay hueco
-                        cars[i]=car;    //aparcar el coche
-                        pos=i;
-                    }
-                }
-            }
-            return pos;
-            /**
-             * pos = searFirstSpot();
-             * if(pos>-1){
-             *  cars[pos]=car;
-             * }
-             */
-        }
-        public Car unParkCar(String license){
-            Car car=null;
-            int pos = searchCar(license);
-            if(pos>-1){
-                car = cars[pos];
-                cars[pos]=null; //dejo mi parking libre
-            }
-            return car;
-        }
-        public int searFirstSpot(){
-            int pos=-1;
-            for(int i=0;i<cars.length&&pos==-1;i++){
-                if(cars[i]==null) {
-                    pos = i;
-                }
-            }
-            return pos;
-        }
-        public int moveCar(String license, int pos){
-            return -1;
-        }
+    private void mostrarbaraja() {
     }
 }
